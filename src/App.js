@@ -1,25 +1,44 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Home from './Components/Home'
+import Register from './Components/Register'
+import Login from './Components/Login'
+import { Container } from '@mui/material';
+import './App.css';
+import Navigation from './Components/Navigation';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+// Create AppContext to prioritize Login state in nav bar
+export const AppContent = React.createContext({
+  isLoggedIn: false
+});
+
+// Get token state and parse into nav bar
+export default function App() {
+  const token = localStorage.getItem("token");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <AppContent.Provider value={{isLoggedIn}}>
+    <div className='App'>
+      <Router>
+        <Navigation setIsLoggedIn={setIsLoggedIn}/> 
+        <Container maxWidth='md'>
+          <Routes>
+            <Route exact path="/" element={<Home/>} />
+            <Route path = "/register" element={<Register/>} />
+            <Route path = "/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
+          </Routes>
+          </Container>
+          </Router>
+
     </div>
+    </AppContent.Provider>
   );
 }
 
-export default App;

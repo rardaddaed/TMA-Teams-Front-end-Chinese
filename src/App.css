@@ -1,38 +1,104 @@
-.App {
-  text-align: center;
+/* Country Volcanoes */
+.select-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.select-container .select-wrapper {
+  min-width: 250px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Registration */
+.grid-container {
+  margin-top: 2rem;
+  height: 400px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.register-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 0 1.5rem 0rem 1.5rem;
+}
+
+.register-card .register-form{
+  margin-bottom: 0.5rem;
+}
+
+
+.register-card .register-form .email-field{
+  margin-left: 1rem;
+}
+
+.register-card .register-form .password-field{
+  flex: 0 1 auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.register-card .register-title{
+  margin-top: 1.5rem;
+}
+
+.register-card .submit-button{
+  margin-top: 0.5rem;
+}
+
+.register-card .login-nav{
+  margin-top: 3.5rem;
+  font-size: 12px;
+}
+
+.register-card .login-nav .login-nav-link{
+  color: black
+}
+
+.register-card .login-nav .login-nav-link:hover {
+  color: grey
+}
+
+/* Login */
+.login-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.login-card .login-form{
+  margin-bottom: 2rem;
+}
+
+.login-card .login-form .email-field{
+  margin-top: 1rem;
+}
+
+.login-card .login-form .password-field{
+  margin-top: 0.5rem;
+}
+
+.login-card .login-title{
+  margin-top: 1.5rem;
+}
+
+/* Home */
+.img-container {
+  position: relative;
+  text-align: center;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.bg {
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.center-text {
+  font-family: "Lucida Console", "Courier New", monospace;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
+
