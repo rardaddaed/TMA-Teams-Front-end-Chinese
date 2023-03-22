@@ -83,13 +83,14 @@ function Login(props) {
                     
                 </div>
                 <Button type="submit" variant='contained'>Login</Button>
-                <Snackbar open={open} onClose={() => {setOpen(false)}}>
-                {message && <Alert severity="error" sx={{ width: '100%' }}>
+                <Snackbar open={open} onClose={() => { setOpen(false) }}>
+                   <Alert severity="error" sx={{ width: '100%' }}>
                         {message}
-                    </Alert>}
+                    </Alert>
                 </Snackbar>
             </Card>
-            </form>
+         </form>
+            
     );
 
 }

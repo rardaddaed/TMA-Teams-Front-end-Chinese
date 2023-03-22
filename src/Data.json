@@ -1,0 +1,16 @@
+{
+    "english":{
+        "NavHome": "Home",
+        "NavSurveys": "Surveys",
+        "NavLogin": "Login",
+        "NavLogout": "Logout",
+        "NavRegister": "Register"
+    },
+    "chinese":{
+        "NavHome": "首页",
+        "NavSurveys": "问卷",
+        "NavLogin": "登录",
+        "NavLogout": "退出",
+        "NavRegister": "注册"
+    }
+}
