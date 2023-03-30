@@ -6,9 +6,15 @@ import {
   Route,
 } from "react-router-dom";
 import Home from './Components/Home'
-import Surveys from './Components/Surveys'
 import Register from './Components/Register'
 import Login from './Components/Login'
+
+//*测试使用
+import Project from './Components/Project'
+import Groups from './Components/Group'
+
+
+
 import { Container } from '@mui/material';
 import './App.css';
 import Navigation from './Components/Navigation';
@@ -32,47 +38,49 @@ export default function App() {
 
 
   const [language, setLanguage] = useState("english");
-  const [content, setContent] = useState({});
+  const [lanContent, setLanContent] = useState({});
 
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('selectedLanguage');
 
     if (storedLanguage === "english"){
-      setContent(Translation.english)
+      setLanContent(Translation.english)
     } else if (storedLanguage === "chinese"){
-      setContent(Translation.chinese)
+      setLanContent(Translation.chinese)
     }
   })
 
   function handleSelectLanguage(newLanguage){
-    setContent(newLanguage);
+    setLanContent(newLanguage);
     localStorage.setItem('selectedLanguage', newLanguage)
   }
 
 
   return (
     <React.Fragment>
-      <LoginContext.Provider value={{ isLoggedIn }}>
+      <LoginContext.Provider value={!{ isLoggedIn }}>
         <div className='App'>
           <Router>
             <Navigation setIsLoggedIn={setIsLoggedIn}
                         language={language}
                         onLanguageChange={handleSelectLanguage}
-                        content={content} 
+                        lanContent={lanContent} 
                         />
             <Container maxWidth='md'>
               <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-                <Route path="/surveys" element={<Surveys />} />
+                <Route exact path="/" element={<Home lanContent={lanContent} />} />
+                <Route path="/register" element={<Register lanContent={lanContent}/>} />
+                <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
+                                                     lanContent={lanContent}/>} />
+                <Route path='/project' element={<Project />}/>
+                <Route path='/group' element={<Groups />}/>
               </Routes>
             </Container>
           </Router>
-
         </div>
-      </LoginContext.Provider>
+      </LoginContext.Provider> 
+
     </React.Fragment>
   );
 }

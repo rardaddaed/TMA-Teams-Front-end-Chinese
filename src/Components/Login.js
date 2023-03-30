@@ -6,6 +6,8 @@ import Alert from '@mui/material/Alert';
 import Snackbar from "@mui/material/Snackbar";
 import Card from "@mui/material/Card";
 import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
+
 
 function Login(props) {
     const emailElementRef = useRef();
@@ -65,24 +67,26 @@ function Login(props) {
         <form onSubmit={handleSubmit}>
             <Card className='login-card' variant="outlined" >
             <div  className='login-title'>
-                <h1>Login</h1>
+                <h1>{props.lanContent.LoginTitle}</h1>
             </div>
 
                 <div className='login-form'>
                     <div className='email-field'>
-                        <TextField label="Email" variant="outlined" 
+                        <TextField label={props.lanContent.LoginEmail} variant="outlined" 
                         type="email"
                         inputRef={emailElementRef}/>
                     </div>
                     <br />
                     <div className='password-field'>
-                        <TextField label="Password" variant="outlined" 
+                        <TextField label={props.lanContent.LoginPassword} variant="outlined" 
                         type="password"
                         inputRef={passwordElementRef}/>
                     </div>
                     
                 </div>
-                <Button type="submit" variant='contained'>Login</Button>
+
+
+                <Button type="submit" variant='contained' component={Link} to="/home">{props.lanContent.LoginTitle}</Button>
                 <Snackbar open={open} onClose={() => { setOpen(false) }}>
                    <Alert severity="error" sx={{ width: '100%' }}>
                         {message}

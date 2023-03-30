@@ -27,19 +27,21 @@ function Navigation(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/">{props.content.NavHome}</Nav.Link>
-            <Nav.Link href="/surveys/">{props.content.NavSurveys}</Nav.Link>
-            {isLoggedIn && <Nav.Link href="/" onClick={() => logout()}>{props.content.NavLogout}</Nav.Link>}
-            {!isLoggedIn && <Nav.Link href="/login/">{props.content.NavLogin}</Nav.Link>}
-            {!isLoggedIn && <Nav.Link href="/register/">{props.content.NavRegister}</Nav.Link>}
+            <Nav.Link href="/">{props.lanContent.NavHome}</Nav.Link>
+            <Nav.Link href="/surveys/">{props.lanContent.NavSurveys}</Nav.Link>
+            <Nav.Link href="/project/">{props.lanContent.NavProject}</Nav.Link>
+            <Nav.Link href="/groups/">{props.lanContent.NavGroups}</Nav.Link>
+            {isLoggedIn && <Nav.Link href="/" onClick={() => logout()}>{props.lanContent.NavLogout}</Nav.Link>}
+            {!isLoggedIn && <Nav.Link href="/login/">{props.lanContent.NavLogin}</Nav.Link>}
+            {!isLoggedIn && <Nav.Link href="/register/">{props.lanContent.NavRegister}</Nav.Link>}
           </Nav>
           <Dropdown onSelect={handleSelectLanguageClick}>
             <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
-              Language
+            {props.lanContent.NavLanguage}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item eventKey="english">English</Dropdown.Item>
-              <Dropdown.Item eventKey="chinese">Chinese</Dropdown.Item>
+              <Dropdown.Item eventKey="english">{props.lanContent.NavLanguageEng}</Dropdown.Item>
+              <Dropdown.Item eventKey="chinese">{props.lanContent.NavLanguageCn}</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>
