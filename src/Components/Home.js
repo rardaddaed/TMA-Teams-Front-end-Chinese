@@ -1,55 +1,52 @@
-import React from 'react';
-import { Toolbar} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+// src/components/CSVHandler.js
+import React, { useState } from 'react';
+import { Box, Button } from '@mui/material';
+import Papa from 'papaparse';
+import { saveAs } from 'file-saver';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: ' #EAEAEA',
-    height: '100%'
-  },
-  paper: {
-    padding: theme.spacing(2),
-    margin: theme.spacing(2),
-    width:'100%'
-  },
-  item:{
-    padding: theme.spacing(2),
-    marginLeft: '250px',
-    marginRight: '30px',
-    marginTop: '30px',
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    height: '100% '
-  },
-  title:{
-    marginLeft: '270px',
-  }
-}));
+const Home = () => {
+  const [data, setData] = useState([]);
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    Papa.parse(file, {
+      complete: (result) => {
+        setData(result.data);
+      },
+    });
+  };
 
-function Home(props){
-  const classes = useStyles();
+  const handleFileDownload = () => {
+    const csvContent = data.map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'export.csv');
+  };
 
-  
   return (
-    <div className={classes.root}>
-      <Toolbar />
-      <h1 className={classes.title}>SCV功能没有实现</h1>
-      <div className={classes.item}>
-        <Button variant="contained" color="primary">
-          {props.lanContent.HomeUpload}
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
+      <input
+        accept=".csv"
+        id="contained-button-file"
+        type="file"
+        style={{ display: 'none' }}
+        onChange={handleFileUpload}
+      />
+      <label htmlFor="contained-button-file">
+        <Button component="span" variant="contained">
+          上传CSV
         </Button>
-        <Button variant="contained" color="primary">
-          {props.lanContent.HomeDownload}
-        </Button>
-      </div>
-    </div>
+      </label>
+      <Button
+        sx={{ mt: 2 }}
+        variant="contained"
+        color="primary"
+        onClick={handleFileDownload}
+        disabled={data.length === 0}
+      >
+        下载CSV
+      </Button>
+    </Box>
   );
-}
-
+};
 
 export default Home;

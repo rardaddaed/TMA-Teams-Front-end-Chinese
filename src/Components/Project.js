@@ -27,28 +27,28 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: ' #EAEAEA',
-  },
-  paper: {
-    padding: theme.spacing(2),
-    margin: theme.spacing(2),
-    width:'100%'
-  },
-  item:{
-    padding: theme.spacing(2),
-    marginLeft: '250px',
-    marginRight: '30px',
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    marginTop: '30px',
-  },
-  title:{
-    marginLeft: '270px',
-  }
+  // root: {
+  //   width: '100%',
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   backgroundColor: ' #EAEAEA',
+  // },
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   margin: theme.spacing(2),
+  //   width:'100%'
+  // },
+  // item:{
+  //   padding: theme.spacing(2),
+  //   marginLeft: '250px',
+  //   marginRight: '30px',
+  //   backgroundColor: 'white',
+  //   borderRadius: '10px',
+  //   marginTop: '30px',
+  // },
+  // title:{
+  //   marginLeft: '270px',
+  // }
 }));
 
 //表单

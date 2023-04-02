@@ -14,13 +14,13 @@ import Project from './Components/Project'
 import Groups from './Components/Group'
 
 
-
 import { Container } from '@mui/material';
 import './App.css';
 import Navigation from './Components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Translation from './Data.json';
+import TestSurvey from './Components/TestSurvey';
 
 // Create AppContext to prioritize Login state in nav bar
 export const LoginContext = React.createContext({
@@ -75,13 +75,14 @@ export default function App() {
                                                      lanContent={lanContent}/>} />
                 <Route path='/project' element={<Project />}/>
                 <Route path='/group' element={<Groups />}/>
+                <Route path='/surveys' element={<TestSurvey />}/>
               </Routes>
             </Container>
           </Router>
         </div>
       </LoginContext.Provider> 
-
     </React.Fragment>
+    
   );
 }
 
