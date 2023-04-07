@@ -12,7 +12,7 @@ import Login from './Components/Login'
 //*测试使用
 import Project from './Components/Project'
 import Groups from './Components/Group'
-
+import BG from './Components/BG';
 
 import { Container } from '@mui/material';
 import './App.css';
@@ -76,6 +76,7 @@ export default function App() {
                 <Route path='/project' element={<Project />}/>
                 <Route path='/group' element={<Groups />}/>
                 <Route path='/surveys' element={<TestSurvey />}/>
+                <Route path='/bg' element={<BG />}/>
               </Routes>
             </Container>
           </Router>
