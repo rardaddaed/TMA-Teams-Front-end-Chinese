@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import {Alert} from '@mui/material'
 import Snackbar from "@mui/material/Snackbar";
 import Card from "@mui/material/Card";
+import Layout from './Layout';
+
 
 function Register(props) {
     const emailElementRef = useRef();
@@ -48,6 +50,7 @@ function Register(props) {
 
     // Returns registration form, obtains user info from textfield and alerts error if error responds
     return (
+        <Layout>
         <form onSubmit={handleSubmit}>
             <Card className='register-card' variant="outlined" >
                 <div className='register-title'>
@@ -86,6 +89,7 @@ function Register(props) {
                 <a href="/login" className='login-nav-link'>{props.lanContent.RegisterLoginLink}</a></h1>
             </Card>
         </form>
+        </Layout>
     );
 
 }

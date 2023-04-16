@@ -10,6 +10,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { Delete as DeleteIcon } from "@material-ui/icons";
+import Layout from './Layout';
+
 
 function SurveyPage() {
   const [surveys, setSurveys] = useState([]);
@@ -35,7 +37,8 @@ function SurveyPage() {
   };
 
   return (
-    <div>
+    
+    <Layout>
       <Typography variant="h3" gutterBottom>
         Survey Page
       </Typography>
@@ -101,7 +104,7 @@ function SurveyPage() {
           </ListItem>
         ))}
       </List>
-    </div>
+    </Layout>
   );
 }
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
+import Layout from './Layout';
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -23,6 +24,7 @@ const Home = () => {
   };
 
   return (
+    <Layout>
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
       <input
         accept=".csv"
@@ -46,6 +48,7 @@ const Home = () => {
         下载CSV
       </Button>
     </Box>
+    </Layout>
   );
 };
 

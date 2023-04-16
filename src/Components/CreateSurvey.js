@@ -17,7 +17,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
-
+import Layout from './Layout';
 
 const QuestionTypes = {
   MULTIPLE_CHOICE: 'Multiple Choice',
@@ -25,7 +25,7 @@ const QuestionTypes = {
   LONG_ANSWER: 'Long Answer',
 };
 
-const TestSurvey = () => {
+const CreateSurvey = () => {
   const [questionType, setQuestionType] = useState(QuestionTypes.MULTIPLE_CHOICE);
   const [questionText, setQuestionText] = useState('');
   const [options, setOptions] = useState(['', '']);
@@ -94,6 +94,7 @@ const TestSurvey = () => {
   };
 
   return (
+    <Layout>
     <Box sx={{ flexGrow: 1 }}>
       {/* <form onSubmit={handleSubmit}> */}
       <Grid container spacing={2}>
@@ -204,7 +205,8 @@ const TestSurvey = () => {
       </Grid>
       {/* </form> */}
     </Box>
+    </Layout>
   );
 };
 
-export default TestSurvey;
+export default CreateSurvey;

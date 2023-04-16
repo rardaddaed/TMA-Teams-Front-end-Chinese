@@ -12,7 +12,6 @@ import Login from './Components/Login'
 //*测试使用
 import Project from './Components/Project'
 import Groups from './Components/Group'
-import BG from './Components/BG';
 
 import { Container } from '@mui/material';
 import './App.css';
@@ -20,7 +19,7 @@ import Navigation from './Components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Translation from './Data.json';
-import TestSurvey from './Components/TestSurvey';
+import CreateSurvey from './Components/CreateSurvey';
 
 // Create AppContext to prioritize Login state in nav bar
 export const LoginContext = React.createContext({
@@ -58,32 +57,56 @@ export default function App() {
 
 
   return (
+    // <React.Fragment>
+    //   <LoginContext.Provider value={!{ isLoggedIn }}>
+    //     <div className='App'>
+    //       <Router>
+    //         <Navigation setIsLoggedIn={setIsLoggedIn}
+    //                     language={language}
+    //                     onLanguageChange={handleSelectLanguage}
+    //                     lanContent={lanContent} 
+    //                     />
+    //         <Container maxWidth='md'>
+    //           <Routes>
+    //             <Route exact path="/" element={<Home lanContent={lanContent} />} />
+    //             <Route path="/register" element={<Register lanContent={lanContent}/>} />
+    //             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
+    //                                                  lanContent={lanContent}/>} />
+    //             <Route path='/project' element={<Project />}/>
+    //             <Route path='/group' element={<Groups />}/>
+    //             <Route path='/surveys' element={<TestSurvey />}/>
+    //             <Route path='/bg' element={<BG />}/>
+    //           </Routes>
+    //         </Container>
+    //       </Router>
+    //     </div>
+    //   </LoginContext.Provider> 
+    // </React.Fragment>
     <React.Fragment>
+            <Router>
+        <Routes>
+          <Route exact path="/" element={<Home lanContent={lanContent} />} />
+          <Route path='/project' element={<Project />}/>
+          <Route path='/group' element={<Groups />}/>
+          <Route path='/surveys' element={<CreateSurvey />}/>
+          <Route path="/register" element={<Register lanContent={lanContent}/>} />
+          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
+                                                     lanContent={lanContent}/>} />
+        </Routes>
+      </Router>
       <LoginContext.Provider value={!{ isLoggedIn }}>
         <div className='App'>
           <Router>
-            <Navigation setIsLoggedIn={setIsLoggedIn}
-                        language={language}
-                        onLanguageChange={handleSelectLanguage}
-                        lanContent={lanContent} 
-                        />
             <Container maxWidth='md'>
               <Routes>
-                <Route exact path="/" element={<Home lanContent={lanContent} />} />
-                <Route path="/register" element={<Register lanContent={lanContent}/>} />
-                <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
-                                                     lanContent={lanContent}/>} />
-                <Route path='/project' element={<Project />}/>
-                <Route path='/group' element={<Groups />}/>
-                <Route path='/surveys' element={<TestSurvey />}/>
-                <Route path='/bg' element={<BG />}/>
+
               </Routes>
             </Container>
           </Router>
         </div>
       </LoginContext.Provider> 
+
     </React.Fragment>
-    
   );
 }
 

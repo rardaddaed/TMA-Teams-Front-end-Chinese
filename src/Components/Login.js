@@ -7,7 +7,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Card from "@mui/material/Card";
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-
+import Layout from './Layout';
 
 function Login(props) {
     const emailElementRef = useRef();
@@ -64,6 +64,7 @@ function Login(props) {
 
     // Returns the login form and obtains the login info from textfield, alerts error if error is responded
     return (
+        <Layout>
         <form onSubmit={handleSubmit}>
             <Card className='login-card' variant="outlined" >
             <div  className='login-title'>
@@ -94,7 +95,7 @@ function Login(props) {
                 </Snackbar>
             </Card>
          </form>
-            
+         </Layout>
     );
 
 }

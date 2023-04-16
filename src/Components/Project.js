@@ -23,7 +23,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-
+import Layout from './Layout';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -206,16 +206,12 @@ const TestProject = () => {
     setPage(0);
   };
 
-
-  
-
   return (
+    <Layout>
     <div className={classes.root}>
-
         <h1 className={classes.title}>项目管理</h1>
-
         {/*上部分current project*/}
-      <div className={classes.item} style={{backgroundColor:"white"}}>
+      <div className={classes.item} >
         <Typography variant="h6" gutterBottom >
           Current Projects
         </Typography>
@@ -328,6 +324,7 @@ const TestProject = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
