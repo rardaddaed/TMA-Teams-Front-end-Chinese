@@ -5,18 +5,19 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Home from './Components/Home'
+import CSV from './Components/CSV'
 import Register from './Components/Register'
 import Login from './Components/Login'
 
 //*测试使用
 import Project from './Components/Project'
 import Groups from './Components/Group'
-
+import Home from './Components/Home';
 import { Container } from '@mui/material';
 import './App.css';
 import Navigation from './Components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserInformation from './Components/UserInformation';
 
 import Translation from './Data.json';
 import CreateSurvey from './Components/CreateSurvey';
@@ -83,15 +84,17 @@ export default function App() {
     //   </LoginContext.Provider> 
     // </React.Fragment>
     <React.Fragment>
-            <Router>
+      <Router>
         <Routes>
           <Route exact path="/" element={<Home lanContent={lanContent} />} />
           <Route path='/project' element={<Project />}/>
           <Route path='/group' element={<Groups />}/>
+          <Route path='/csv' element={<CSV />}/>
           <Route path='/surveys' element={<CreateSurvey />}/>
           <Route path="/register" element={<Register lanContent={lanContent}/>} />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
                                                      lanContent={lanContent}/>} />
+          <Route path='/userinfo' element={<UserInformation />}/>
         </Routes>
       </Router>
       <LoginContext.Provider value={!{ isLoggedIn }}>

@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, IconButton, Button, Box, Grid, Container, 
 import { AccountCircle, Notifications } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import log from '../img/Mindset_Academy_logo.png'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,7 +42,7 @@ const Header = () => {
       <AppBar position="static" style={{ backgroundColor: headerBGColor }}>
         <Toolbar>
           <Box flexGrow={1}>
-            <img src="public\Mindset_Academy_logo.png" alt="Logo" />
+            <img style={{ width: '250px', height: '70px' }} src={log} alt="Logo" />
           </Box>
           <IconButton color="inherit">
             <Notifications />
@@ -69,11 +70,11 @@ const Header = () => {
               horizontal: 'center',
             }}
           >
-            <MenuItem onClick={handleMenuClose}>用户信息</MenuItem>
+            <MenuItem onClick={handleMenuClose} component={Link} to="/userinfo">用户信息</MenuItem>
             <MenuItem onClick={handleMenuClose} component={Link} to="/">退出登录</MenuItem>
           </Popover>
-          <a href='/login' style={linkStyle}><Button color="inherit">登录</Button></a>
-          <a href='/register' style={linkStyle}><Button color="inherit">注册</Button></a>
+          <Button color="inherit" component={Link} to="/login">登录</Button>
+          <Button color="inherit" component={Link} to="/register">注册</Button>
         </Toolbar>
       </AppBar>
     </div>

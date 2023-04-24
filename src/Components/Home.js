@@ -1,54 +1,83 @@
-// src/components/CSVHandler.js
-import React, { useState } from 'react';
-import { Box, Button } from '@mui/material';
-import Papa from 'papaparse';
-import { saveAs } from 'file-saver';
-import Layout from './Layout';
+// Home.js
+import React from 'react';
+import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem,Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import img1 from '../img/bg.jpg'
 
 const Home = () => {
-  const [data, setData] = useState([]);
+  const headerBGColor = '#C1A783';
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    Papa.parse(file, {
-      complete: (result) => {
-        setData(result.data);
-      },
-    });
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleFileDownload = () => {
-    const csvContent = data.map((row) => row.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, 'export.csv');
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   return (
-    <Layout>
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
-      <input
-        accept=".csv"
-        id="contained-button-file"
-        type="file"
-        style={{ display: 'none' }}
-        onChange={handleFileUpload}
-      />
-      <label htmlFor="contained-button-file">
-        <Button component="span" variant="contained">
-          上传CSV
-        </Button>
-      </label>
-      <Button
-        sx={{ mt: 2 }}
-        variant="contained"
-        color="primary"
-        onClick={handleFileDownload}
-        disabled={data.length === 0}
+    <div>
+      <AppBar position="static" style={{ backgroundColor: headerBGColor }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            TMA
+          </Typography>
+          <IconButton onClick={handleMenuClick} color="inherit">
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>中文</MenuItem>
+            <MenuItem onClick={handleMenuClose}>English</MenuItem>
+          </Menu>
+          <a href='/login'><Button>Get Started</Button></a>
+
+        </Toolbar>
+      </AppBar>
+
+      <Box  
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Our Slogan
+        </Typography>
+        <Typography variant="body1" component="p">
+          Some text describing our company or products.
+        </Typography>
+      </Box>
+      <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        left: '20%',
+        right: '20%',
+      }}
       >
-        下载CSV
-      </Button>
-    </Box>
-    </Layout>
+        <Carousel >
+            <div>
+                <img src={img1} alt="Image 1" />
+            </div>
+            <div>
+                <img src="img2.jpg" alt="Image 2" />
+            </div>
+            <div>
+                <img src="img3.jpg" alt="Image 3" />
+            </div>
+        </Carousel>
+        </Box>
+    </div>
   );
 };
 
