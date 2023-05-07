@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,13 +32,13 @@ function generateState(){
 
 const authUrl = 'https://hydra.adp.au/oauth2/auth';
 const tokenUrl = 'https://hydra.adp.au/oauth2/token';
+const logOutUrl = 'https://hydra.adp.au/oauth2/logout';
 const state = generateState();
 
 export default function App() {
 
   const [language, setLanguage] = useState("english");
   const [lanContent, setLanContent] = useState({});
-
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('selectedLanguage');
@@ -64,6 +64,7 @@ const authConfig = {
     redirectUri: 'http://localhost:3000/home',
     scope: 'openid offline profile email roles',
     state: state,
+    autoLogin: false
 }
 
 
@@ -75,6 +76,7 @@ const authConfig = {
             <Navigation language={language}
                         onLanguageChange={handleSelectLanguage}
                         lanContent={lanContent} 
+                        state={state}
                          />
               <Routes>
                 <Route exact path="/home" element={<Home lanContent={lanContent} />} /> 
@@ -85,7 +87,7 @@ const authConfig = {
               </Routes>
           </Router>
         </div>
-      </AuthProvider>
+      </AuthProvider>/
     </React.Fragment>
   );
 }

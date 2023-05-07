@@ -1,8 +1,18 @@
-import React, { useContext,useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
+import { AuthContext } from 'react-oauth2-code-pkce';
 import '../App.css';
 
 function Navigation(props) {
+  const { token, login, logOut } = useContext(AuthContext);
+
+  // useEffect(() => {
+  //   console.log('aaa', token)
+  //   if (!token) {
+  //     console.log('bbb')
+  //     login(props.state);
+  //   }
+  // }, [])
 
   const { language, onLanguageChange } = props;
 
@@ -40,7 +50,7 @@ function Navigation(props) {
       <Dropdown.Menu>
         <Dropdown.Item href="/profile">Profile Settings</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item href="#action/3.3">Logout</Dropdown.Item>
+        <Dropdown.Item onClick={() => logOut()}>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
         </Navbar.Collapse>

@@ -13,10 +13,14 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import Layout from './Layout';
 import { AuthContext } from 'react-oauth2-code-pkce';
+import jwt_decode from 'jwt-decode';
 
 
 function UserInformation(props){
-    const token = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+    console.log(authContext);
+    const decodedToken = jwt_decode(authContext.idToken);
+    console.log(decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
     const userUrl = `https://tma.adp.au/User/`
     const [isEditing, setIsEditing] = useState({ name: false, email: false });
     const [userInfo, setUserInfo] = useState({
@@ -28,7 +32,7 @@ function UserInformation(props){
     const handleEditClick = (field) => {
       setIsEditing({ ...isEditing, [field]: true });
       setTempInfo({ ...tempInfo, [field]: userInfo[field] });
-      console.log({token})
+      console.log({token: authContext})
     };
   
     const handleSave = (field) => {

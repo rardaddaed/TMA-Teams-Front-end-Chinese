@@ -54,6 +54,16 @@ const QuestionTypes = {
     );
   }
 
+  const { token, login, logOut } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log('aaa', token)
+    if (!token) {
+      console.log('bbb')
+      login();
+    }
+  }, [])
+
   const [questionType, setQuestionType] = useState(QuestionTypes.MultipleChoice.value);
   const [questionText, setQuestionText] = useState('');
   const [options, setOptions] = useState(['', '']);
@@ -129,8 +139,6 @@ const QuestionTypes = {
     const newOptions = options.filter((_, i) => i !== index);
     setOptions(newOptions);
   };
-
-  const {token} = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
