@@ -1,11 +1,10 @@
-// src/components/CSVHandler.js
-import React, { useState } from 'react';
+
+import React, { useContext, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
-import Layout from './Layout';
 
-const CSV = () => {
+function CSV(props){
   const [data, setData] = useState([]);
 
   const handleFileUpload = (e) => {
@@ -24,7 +23,6 @@ const CSV = () => {
   };
 
   return (
-    <Layout>
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
       <input
         accept=".csv"
@@ -35,7 +33,7 @@ const CSV = () => {
       />
       <label htmlFor="contained-button-file">
         <Button component="span" variant="contained">
-          上传CSV
+        {props.lanContent.HomeUpload}
         </Button>
       </label>
       <Button
@@ -45,10 +43,9 @@ const CSV = () => {
         onClick={handleFileDownload}
         disabled={data.length === 0}
       >
-        下载CSV
+        {props.lanContent.HomeDownload}
       </Button>
     </Box>
-    </Layout>
   );
 };
 

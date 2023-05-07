@@ -1,6 +1,5 @@
 // Layout.js
 import React from 'react';
-import Header from './Header';
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
@@ -15,7 +14,6 @@ const Layout = ({ children }) => {
         backgroundColor: mainBGColor,
       }}
     >
-      <Header/>
       <div
         style={{
           marginTop: '100px',
@@ -26,7 +24,6 @@ const Layout = ({ children }) => {
           flexDirection: 'column',
         }}
       >{children}</div>
-      <Footer />
     </div>
   );
 };

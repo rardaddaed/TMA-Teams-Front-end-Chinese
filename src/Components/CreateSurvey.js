@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -17,25 +18,79 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
-import Layout from './Layout';
+import { AuthContext } from 'react-oauth2-code-pkce';
 
+function CreateSurvey(props) {
 const QuestionTypes = {
-  MULTIPLE_CHOICE: 'Multiple Choice',
-  SHORT_RESPONSE: 'Short Response',
-  LONG_ANSWER: 'Long Answer',
+  MultipleChoice: {
+    title: props.lanContent.MultipleChoice,
+    value: 'MultipleChoice'
+  },
+  SingleChoice: {
+    title: props.lanContent.SingleChoice,
+    value: 'SingleChoice'
+  },
+  Text: {
+    title: props.lanContent.Text,
+    value: 'Text'
+  },
+  DateTime: {
+    title: props.lanContent.DateTime,
+    value: 'DateTime'
+  },
+  Number: {
+    title: props.lanContent.Number,
+    value: 'Number'
+  },
+  YesNo: {
+    title: props.lanContent.YesNo,
+    value: 'YesNo'
+  }
 };
 
-const CreateSurvey = () => {
-  const [questionType, setQuestionType] = useState(QuestionTypes.MULTIPLE_CHOICE);
+  function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+  }
+
+  const [questionType, setQuestionType] = useState(QuestionTypes.MultipleChoice.value);
   const [questionText, setQuestionText] = useState('');
   const [options, setOptions] = useState(['', '']);
   const [savedQuestions, setSavedQuestions] = useState([]);
 
+  const surveyNameRef = useRef();
+  const [questions, setQuestions] = useState([]);
+
+  const [surveyNameHasError, setSurveyNameHasError] = useState(false);
+  const [questionNameHasError, setQuestionNameHasError] = useState(false);
+
+  
+  const navigate = useNavigate();
+
   const saveQuestion = () => {
+    if (!surveyNameRef.current.value) {
+      setSurveyNameHasError(true);
+      return;
+    } else {
+      setSurveyNameHasError(false);
+    }
+
+    if (!questionText){
+      setQuestionNameHasError(true);
+      return;
+    } else {
+      setQuestionNameHasError(false);
+    }
+
     const savedData = {
-      type: questionType,
-      text: questionText,
-      options: questionType === QuestionTypes.MULTIPLE_CHOICE ? options : null,
+      surveyId: uuidv4(),
+      name: questionText,
+      responseType: questionType,
+      elementJSON: "string",
+      choices: questionType === QuestionTypes.MultipleChoice.value ? 
+      options : questionType === QuestionTypes.SingleChoice.value ?
+      options : null,
     };
     setSavedQuestions([...savedQuestions, savedData]);
   };
@@ -75,28 +130,46 @@ const CreateSurvey = () => {
     setOptions(newOptions);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-  
-    // Validate the form
-    if (!questionText || (questionType === QuestionTypes.MULTIPLE_CHOICE && options.some((option) => !option))) {
-      return; // Return early if any required field is empty
+  const {token} = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const body = {
+      name: surveyNameRef.current.value,
+      requiresAuthentication: true,
+      requiresAuthenticationFromSameOrganisation: true,
+      json: "string",
+      questions: [...savedQuestions, {
+        surveyId: uuidv4(),
+        name: questionText,
+        responseType: questionType,
+        elementJSON: "string",
+        choices: questionType === QuestionTypes.MultipleChoice.value ? 
+        options : questionType === QuestionTypes.SingleChoice.value ?
+        options : null,
+      }],
     }
-  
-    // Save the question and reset the form
-    setSavedQuestions((prevQuestions) => [
-      ...prevQuestions,
-      { id: uuidv4(), questionText, questionType, options: [...options] },
-    ]);
-    setQuestionText('');
-    setQuestionType(QuestionTypes.MULTIPLE_CHOICE);
-    setOptions(['', '']);
-  };
+
+    const surveyUrl = "https://tma.adp.au/survey";
+
+    let result = await fetch(surveyUrl, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        "accept": 'application/json',
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    if (result.ok) {
+      result = await result.json();
+      navigate(`${result.id}`)
+    }
+  }
+
 
   return (
-    <Layout>
     <Box sx={{ flexGrow: 1 }}>
-      {/* <form onSubmit={handleSubmit}> */}
       <Grid container spacing={2}>
       {savedQuestions.map((savedQuestion, index) => (
           <Grid  key={`saved-question-${index}`} item xs={12}>
@@ -105,15 +178,15 @@ const CreateSurvey = () => {
               sx={{ p: 2, backgroundColor: 'primary.light', borderRadius: 1, position: 'relative' }}
             >
               <Typography variant="h6" color="primary.contrastText">
-                Saved Question
+                {props.lanContent.SurvySavedQuestion} {index + 1}
               </Typography>
-              <Typography color="primary.contrastText">Type: {savedQuestion.type}</Typography>
-              <Typography color="primary.contrastText">Text: {savedQuestion.text}</Typography>
-              {savedQuestion.type === QuestionTypes.MULTIPLE_CHOICE && (
+              <Typography color="primary.contrastText">{props.lanContent.SurveyQuestionType}: {savedQuestion.responseType}</Typography>
+              <Typography color="primary.contrastText">{props.lanContent.SurveyQuestionName}: {savedQuestion.name}</Typography>
+              {(savedQuestion.responseType === QuestionTypes.MultipleChoice.value || savedQuestion.responseType === QuestionTypes.SingleChoice.value) && (
                 <>
-                  <Typography color="primary.contrastText">Options:</Typography>
+                  <Typography color="primary.contrastText">{props.lanContent.SurveySavedQuestionChoice}</Typography>
                   <ul>
-                    {savedQuestion.options.map((option, index) => (
+                    {savedQuestion.choices.map((option, index) => (
                       <li key={`saved-option-${index}`} style={{ color: 'white' }}>
                         {option}
                       </li>
@@ -142,11 +215,19 @@ const CreateSurvey = () => {
         ))}
 
         <Grid item xs={12}>
-          <Typography variant="h6">Create a Question</Typography>
+          <Typography variant="h6">{props.lanContent.SurveyTitle}</Typography>
+          <TextField
+                fullWidth
+                label={props.lanContent.SurveyName}
+                inputRef={surveyNameRef}
+                variant="outlined"
+                required
+                error={surveyNameHasError}
+              />
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
-            <InputLabel id="question-type-label">Question Type</InputLabel>
+            <InputLabel id="question-type-label">{props.lanContent.SurveyQuestionType}</InputLabel>
             <Select
               labelId="question-type-label"
               id="question-type"
@@ -155,8 +236,8 @@ const CreateSurvey = () => {
               label="Question Type"
             >
               {Object.values(QuestionTypes).map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
+                <MenuItem key={type.value} value={type.value}>
+                  {type.title}
                 </MenuItem>
               ))}
             </Select>
@@ -166,24 +247,24 @@ const CreateSurvey = () => {
           <TextField
             fullWidth
             id="question-text"
-            label="Question Text"
+            label={props.lanContent.SurveyQuestionName}
             value={questionText}
             onChange={handleQuestionTextChange}
             variant="outlined"
             required
+            error={questionNameHasError}
           />
         </Grid>
-        {questionType === QuestionTypes.MULTIPLE_CHOICE &&
+        {(questionType === QuestionTypes.MultipleChoice.value || questionType === QuestionTypes.SingleChoice.value) &&
           options.map((option, index) => (
             <Grid key={`option-${index}`} item xs={12}>
               <TextField
                 fullWidth
                 id={`option-${index}`}
-                label={`Option ${index + 1}`}
+                label={`${props.lanContent.SurveyChoice} ${index + 1}`}
                 value={option}
                 onChange={(event) => handleOptionChange(event, index)}
                 variant="outlined"
-                required
               />
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                 <IconButton onClick={() => removeOption(index)} disabled={options.length <= 2}>
@@ -199,14 +280,16 @@ const CreateSurvey = () => {
           ))}
         <Grid item xs={12}>
           <Button type="submit"  variant="contained" color="primary" onClick={saveQuestion}>
-            Save Question
+            {props.lanContent.SurveySaveQuestion}
+          </Button>
+
+          <Button type="button"  variant="contained" disabled={!savedQuestions.length} color="primary" onClick={handleSubmit}>
+            {props.lanContent.SurveyUpload}
           </Button>
         </Grid>
       </Grid>
-      {/* </form> */}
     </Box>
-    </Layout>
-  );
+  ); 
 };
 
 export default CreateSurvey;

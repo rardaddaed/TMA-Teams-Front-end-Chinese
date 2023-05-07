@@ -1,85 +1,4 @@
-/* Country Volcanoes */
-.select-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-.select-container .select-wrapper {
-  min-width: 250px;
-}
 
-/* Registration */
-.grid-container {
-  margin-top: 2rem;
-  height: 400px;
-}
-
-.register-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 1.5rem 0rem 1.5rem;
-}
-
-.register-card .register-form{
-  margin-bottom: 0.5rem;
-}
-
-
-.register-card .register-form .email-field{
-  margin-left: 1rem;
-}
-
-.register-card .register-form .password-field{
-  flex: 0 1 auto;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.register-card .register-title{
-  margin-top: 1.5rem;
-}
-
-.register-card .submit-button{
-  margin-top: 0.5rem;
-}
-
-.register-card .login-nav{
-  margin-top: 3.5rem;
-  font-size: 12px;
-}
-
-.register-card .login-nav .login-nav-link{
-  color: black
-}
-
-.register-card .login-nav .login-nav-link:hover {
-  color: grey
-}
-
-/* Login */
-.login-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 1.5rem 1.5rem 1.5rem;
-}
-
-.login-card .login-form{
-  margin-bottom: 2rem;
-}
-
-.login-card .login-form .email-field{
-  margin-top: 1rem;
-}
-
-.login-card .login-form .password-field{
-  margin-top: 0.5rem;
-}
-
-.login-card .login-title{
-  margin-top: 1.5rem;
-}
 
 /* Home */
 .img-container {
@@ -101,4 +20,42 @@
   transform: translate(-50%, -50%);
 }
 
+/* Navigation */
+.nav {
+  background-color: rgb(193, 167, 131);
+}
 
+.nav .Nav.Link {
+  color: red;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  padding-top: 0px; /* Add padding to the top */
+}
+
+.success-header {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.success-url {
+  font-size: 1.2rem;
+}
+
+.sucess-return:link {
+  color: black;
+}
+
+.sucess-return:hover {
+  color: grey;
+}

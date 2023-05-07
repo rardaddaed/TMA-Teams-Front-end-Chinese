@@ -20,26 +20,7 @@ const Home = () => {
 
   return (
     <div>
-      <AppBar position="static" style={{ backgroundColor: headerBGColor }}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            TMA
-          </Typography>
-          <IconButton onClick={handleMenuClick} color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleMenuClose}>中文</MenuItem>
-            <MenuItem onClick={handleMenuClose}>English</MenuItem>
-          </Menu>
-          <a href='/login'><Button>Get Started</Button></a>
 
-        </Toolbar>
-      </AppBar>
 
       <Box  
         sx={{

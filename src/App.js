@@ -5,24 +5,18 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import CSV from './Components/CSV'
-import Register from './Components/Register'
-import Login from './Components/Login'
-
-//*测试使用
-import Project from './Components/Project'
-import Groups from './Components/Group'
-import Home from './Components/Home';
-import { Container } from '@mui/material';
-import './App.css';
+import Home from './Components/Home'
 import Navigation from './Components/Navigation';
+import CreateSurvey from './Components/CreateSurvey';
+import CSV from './Components/CSV';
+import UserInformation from './Components/UserInformation'
+import CreateSurveySucess from './Components/CreateSurveySuccess'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import UserInformation from './Components/UserInformation';
 
 import Translation from './Data.json';
-import CreateSurvey from './Components/CreateSurvey';
+import { AuthContext, AuthProvider } from 'react-oauth2-code-pkce';
 
-// Create AppContext to prioritize Login state in nav bar
 export const LoginContext = React.createContext({
   isLoggedIn: false
 });
@@ -31,11 +25,16 @@ export const LanguageContext = React.createContext({
   language: "english"
 });
 
-// Get token state and parse into nav bar
-export default function App() {
-  const token = localStorage.getItem("token");
-  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+function generateState(){
+  const crypto = require('crypto-browserify');
+  return crypto.randomBytes(16).toString('hex');
+}
 
+const authUrl = 'https://hydra.adp.au/oauth2/auth';
+const tokenUrl = 'https://hydra.adp.au/oauth2/token';
+const state = generateState();
+
+export default function App() {
 
   const [language, setLanguage] = useState("english");
   const [lanContent, setLanContent] = useState({});
@@ -48,6 +47,8 @@ export default function App() {
       setLanContent(Translation.english)
     } else if (storedLanguage === "chinese"){
       setLanContent(Translation.chinese)
+    } else {
+      setLanContent(Translation.english)
     }
   })
 
@@ -56,60 +57,35 @@ export default function App() {
     localStorage.setItem('selectedLanguage', newLanguage)
   }
 
+const authConfig = {
+    clientId: '2dac11ff-4039-4fec-b16e-a3216b82ba88',
+    authorizationEndpoint: authUrl,
+    tokenEndpoint: tokenUrl,
+    redirectUri: 'http://localhost:3000/home',
+    scope: 'openid offline profile email roles',
+    state: state,
+}
+
 
   return (
-    // <React.Fragment>
-    //   <LoginContext.Provider value={!{ isLoggedIn }}>
-    //     <div className='App'>
-    //       <Router>
-    //         <Navigation setIsLoggedIn={setIsLoggedIn}
-    //                     language={language}
-    //                     onLanguageChange={handleSelectLanguage}
-    //                     lanContent={lanContent} 
-    //                     />
-    //         <Container maxWidth='md'>
-    //           <Routes>
-    //             <Route exact path="/" element={<Home lanContent={lanContent} />} />
-    //             <Route path="/register" element={<Register lanContent={lanContent}/>} />
-    //             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
-    //                                                  lanContent={lanContent}/>} />
-    //             <Route path='/project' element={<Project />}/>
-    //             <Route path='/group' element={<Groups />}/>
-    //             <Route path='/surveys' element={<TestSurvey />}/>
-    //             <Route path='/bg' element={<BG />}/>
-    //           </Routes>
-    //         </Container>
-    //       </Router>
-    //     </div>
-    //   </LoginContext.Provider> 
-    // </React.Fragment>
     <React.Fragment>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Home lanContent={lanContent} />} />
-          <Route path='/project' element={<Project />}/>
-          <Route path='/group' element={<Groups />}/>
-          <Route path='/csv' element={<CSV />}/>
-          <Route path='/surveys' element={<CreateSurvey />}/>
-          <Route path="/register" element={<Register lanContent={lanContent}/>} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} 
-                                                     lanContent={lanContent}/>} />
-          <Route path='/userinfo' element={<UserInformation />}/>
-        </Routes>
-      </Router>
-      <LoginContext.Provider value={!{ isLoggedIn }}>
+      <AuthProvider authConfig={authConfig}>
         <div className='App'>
           <Router>
-            <Container maxWidth='md'>
+            <Navigation language={language}
+                        onLanguageChange={handleSelectLanguage}
+                        lanContent={lanContent} 
+                         />
               <Routes>
-
+                <Route exact path="/home" element={<Home lanContent={lanContent} />} /> 
+                <Route path="/createsurvey" element={<CreateSurvey lanContent={lanContent}/>}/>
+                <Route path="/createsurvey/:id" element={<CreateSurveySucess lanContent={lanContent}/>}/>
+                <Route path="/csv" element={<CSV lanContent={lanContent}/>}/>
+                <Route path="/profile" element={<UserInformation/>} />
               </Routes>
-            </Container>
           </Router>
         </div>
-      </LoginContext.Provider> 
-
+      </AuthProvider>
     </React.Fragment>
   );
 }
-

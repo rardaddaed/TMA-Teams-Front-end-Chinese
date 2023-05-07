@@ -1,5 +1,5 @@
 // UserInformation.js
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Typography,
   TextField,
@@ -12,22 +12,23 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Layout from './Layout';
-const defaultAvatar = 'https://via.placeholder.com/150';
+import { AuthContext } from 'react-oauth2-code-pkce';
 
-const UserInformation = () => {
-    const [isEditing, setIsEditing] = useState({ name: false, phone: false, email: false });
+
+function UserInformation(props){
+    const token = useContext(AuthContext);
+    const userUrl = `https://tma.adp.au/User/`
+    const [isEditing, setIsEditing] = useState({ name: false, email: false });
     const [userInfo, setUserInfo] = useState({
       name: 'user',
-      phone: '0123456',
       email: '***@gmail.com',
     });
-    const [tempInfo, setTempInfo] = useState({ name: '', phone: '', email: '' });
-  
-    const [userAvatar, setUserAvatar] = useState(defaultAvatar);
+    const [tempInfo, setTempInfo] = useState({ name: '', email: '' });
 
     const handleEditClick = (field) => {
       setIsEditing({ ...isEditing, [field]: true });
       setTempInfo({ ...tempInfo, [field]: userInfo[field] });
+      console.log({token})
     };
   
     const handleSave = (field) => {
@@ -45,16 +46,13 @@ const UserInformation = () => {
       }
     };
 
-    const handleAvatarChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setUserAvatar(reader.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
+   useEffect(() => {
+    const fetchUserInfo = async () => {
+      const res = await fetch(userUrl);
+      const data = await res.json();
+      setUserInfo(data[0].name, data[0].email);
+    }
+   }, [])
 
     return (
         <Layout>
@@ -66,7 +64,7 @@ const UserInformation = () => {
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              {['name', 'phone', 'email'].map((field, index) => (
+              {['name', 'email'].map((field, index) => (
                 <Box key={field} marginBottom="2rem">
                   <Typography
                     variant="subtitle1"
@@ -74,7 +72,6 @@ const UserInformation = () => {
                     sx={{ marginRight: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}
                   >
                     {field === 'name' && '姓名'}
-                    {field === 'phone' && '电话'}
                     {field === 'email' && '邮箱'}
                   </Typography>
                   <Box display="flex" alignItems="center">
@@ -97,24 +94,7 @@ const UserInformation = () => {
                   </Box>
                 </Box>
               ))}
-            </Grid>
-            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar alt="User Avatar" src={userAvatar} sx={{ width: 60, height: 60 }} />
-                <Box marginTop="1rem">
-                <input
-                    accept="image/*"
-                    id="avatar-upload"
-                    type="file"
-                    hidden
-                    onChange={handleAvatarChange}
-                />
-                <label htmlFor="avatar-upload">
-                    <Button variant="contained" component="span">
-                    Modify
-                    </Button>
-                </label>
-                </Box>
-            </Grid>
+              </Grid>
             </Grid>
         </Container>
         </Layout>
