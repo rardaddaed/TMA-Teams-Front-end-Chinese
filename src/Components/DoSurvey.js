@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import {
   Box,
   FormControl,
@@ -28,10 +28,32 @@ function DoSurvey(props){
   const surveyUrl = `https://tma.adp.au/Survey/${id}`
 
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const answers = useRef([]);
 
   const handleOptionChange = (event) => {
+    console.log(event);
     setSelectedOptions(prevOptions => [...prevOptions, event.target.value]);;
   };
+
+  const handleSingleValueChange = (event, index) => {
+    console.log(event.target.value);
+    answers.current[index] = { ...answers.current[index], answer: event.target.value };
+    console.log('answers', answers);
+  }
+
+  const handleMultipleValueChange = (event, index, option) => {
+    if (event.target.checked) {
+      if (answers.current[index].answer.indexOf(option) < 0) {
+        answers.current[index].answer = [...answers.current[index].answer, option];
+      }
+    } else {
+      const idx = answers.current[index].answer.indexOf(option);
+      if (idx > -1) {
+        answers.current[index].answer.splice(idx, 1);
+      }
+    }
+    console.log('answers', answers);
+  }
 
 // fetch survey
   useEffect(() => {
@@ -43,8 +65,21 @@ function DoSurvey(props){
       }});
       const data = await res.json();
       setSurveyTitle(data.name);
-      setQuestions(data.questions)
-      setQuestionId(data.questions.map((question) => question.id))
+      setQuestions(data.questions);
+      setQuestionId(data.questions.map((question) => question.id));
+      answers.current = data.questions.map((question) => {
+        if (question.responseType === 'MultipleChoice') {
+          return {
+            questionId: question.id,
+            answer: []
+          };
+        } else {
+          return {
+            questionId: question.id,
+            answer: null
+          };
+        }
+      });
     }
 
     fetchSurveyQuestions();
@@ -77,14 +112,13 @@ const test = (e) => {
     result = await result.json();
   }
 
-  const Question = ({ type, title, options }) => {
+  const Question = ({ type, title, options, index }) => {
     switch (type) {
       case 'Text':
         return (
           <Box>
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-            <TextField fullWidth multiline 
-            onChange={handleOptionChange}/>
+            <TextField fullWidth multiline onChange={(event) => handleSingleValueChange(event, index)} />
           </Box>
         );
       case 'DateTime':
@@ -92,15 +126,14 @@ const test = (e) => {
           <Box>
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
             <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} 
-            onChange={handleOptionChange}/>
+            onChange={(event) => handleSingleValueChange(event, index)}/>
           </Box>
         );
       case 'Number':
         return (
           <Box>
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-            <TextField fullWidth type="number" 
-            onChange={handleOptionChange}/>
+            <TextField fullWidth type="number" onChange={(event) => handleSingleValueChange(event, index)} />
           </Box>
         );
       case 'SingleChoice':
@@ -108,10 +141,10 @@ const test = (e) => {
           <FormControl component="fieldset">
           <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
           <RadioGroup value={selectedOptions}
-          onChange={handleOptionChange}>
-            {options.map((option, index) => (
+          onChange={(event) => handleSingleValueChange(event, index)}>
+            {options.map((option, optIndex) => (
               <FormControlLabel
-                key={index}
+                key={optIndex}
                 value={option}
                 control={<Radio color="default" />}
                 label={option}
@@ -124,14 +157,11 @@ const test = (e) => {
         return (
           <Box>
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-            <FormGroup
-              value={selectedOptions}      
-              onChange={handleOptionChange}
-            >
-              {options.map((option, index) => (
+            <FormGroup>
+              {options.map((option, optIndex) => (
                 <FormControlLabel
-                  key={index}
-                  control={<Checkbox />}
+                  key={optIndex}
+                  control={<Checkbox onChange={(event) => handleMultipleValueChange(event, index, option)} />}
                   label={option}
                 />
               ))}
@@ -143,7 +173,7 @@ const test = (e) => {
           <FormControl component="fieldset">
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
             <RadioGroup row
-            onChange={handleOptionChange}>
+            onChange={(event) => handleSingleValueChange(event, index)}>
               <FormControlLabel value="yes" control={<Radio color="default" />} label="Yes" />
               <FormControlLabel value="no" control={<Radio color="default" />} label="No" />
             </RadioGroup>
@@ -162,7 +192,7 @@ const test = (e) => {
         </Typography>
         <div style={{ height: 20 }} />
         {questions.map((question, index) => 
-          <Question key={index} type={question.responseType} title={question.name} options={question.choices} />
+          <Question key={index} type={question.responseType} title={question.name} options={question.choices} index={index} />
         )}
         <div style={{ height: 20 }} />
         <Grid item xs={12} container justifyContent="center" alignItems="center">

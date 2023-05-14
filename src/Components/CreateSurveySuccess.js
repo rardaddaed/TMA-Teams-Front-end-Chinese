@@ -11,10 +11,10 @@ function CreateSurveySuccess(props) {
       <FontAwesomeIcon icon={faCheckCircle} size="6x" className="success-icon" />
       <h1 className="success-header">{props.lanContent.UploadSucessTitle}</h1>
       <p className="success-message">{props.lanContent.UploadSucessMsg}</p>
-      <p className="success-url">{props.lanContent.UploadSucessUrl}<a href={`http://localhost:3000/dosurvey/${id}`}>
+      <p className="success-url">{props.lanContent.UploadSucessUrl}<a href={`/dosurvey/${id}`}>
         http://localhost:3000/dosurvey/{id}
           </a></p>
-      <a className="sucess-return" href="http://localhost:3000/home">{props.lanContent.ReturnHome}</a>
+      <a className="sucess-return" href="/home">{props.lanContent.ReturnHome}</a>
     </div>
   );
 }
