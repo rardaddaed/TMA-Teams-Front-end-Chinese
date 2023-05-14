@@ -8,9 +8,11 @@ import {
 import Home from './Components/Home'
 import Navigation from './Components/Navigation';
 import CreateSurvey from './Components/CreateSurvey';
-import CSV from './Components/CSV';
+import DoSurvey from './Components/DoSurvey'
 import UserInformation from './Components/UserInformation'
+import ViewSurveys from './Components/ViewSurveys';
 import CreateSurveySucess from './Components/CreateSurveySuccess'
+import SurveyResults from './Components/SurveyResults'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,7 +34,7 @@ function generateState(){
 
 const authUrl = 'https://hydra.adp.au/oauth2/auth';
 const tokenUrl = 'https://hydra.adp.au/oauth2/token';
-const logOutUrl = 'https://hydra.adp.au/oauth2/logout';
+const logOutUrl = 'https://hydra.adp.au/oauth2/sessions/logout';
 const state = generateState();
 
 export default function App() {
@@ -64,7 +66,10 @@ const authConfig = {
     redirectUri: 'http://localhost:3000/home',
     scope: 'openid offline profile email roles',
     state: state,
-    autoLogin: false
+    autoLogin: false,
+    storage: 'session',
+    logoutEndpoint: logOutUrl,
+    logoutRedirect: 'http://localhost:3000/home',
 }
 
 
@@ -82,8 +87,10 @@ const authConfig = {
                 <Route exact path="/home" element={<Home lanContent={lanContent} />} /> 
                 <Route path="/createsurvey" element={<CreateSurvey lanContent={lanContent}/>}/>
                 <Route path="/createsurvey/:id" element={<CreateSurveySucess lanContent={lanContent}/>}/>
-                <Route path="/csv" element={<CSV lanContent={lanContent}/>}/>
-                <Route path="/profile" element={<UserInformation/>} />
+                <Route path="/dosurvey/:id" element={<DoSurvey lanContent={lanContent}/>}/>
+                <Route path="/profile" element={<UserInformation lanContent={lanContent}/>} />
+                <Route path="/viewsurvey" element={<ViewSurveys lanContent={lanContent}/>} />
+                <Route path="/viewsurvey/:id" element={<SurveyResults lanContent={lanContent}/>} />
               </Routes>
           </Router>
         </div>

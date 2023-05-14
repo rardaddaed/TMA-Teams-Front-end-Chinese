@@ -1,25 +1,5 @@
 
 
-/* Home */
-.img-container {
-  position: relative;
-  text-align: center;
-  color: white;
-}
-.bg {
-  max-width: 100%;
-  max-height: 100vh;
-  margin: auto;
-}
-
-.center-text {
-  font-family: "Lucida Console", "Courier New", monospace;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 /* Navigation */
 .nav {
   background-color: rgb(193, 167, 131);
@@ -29,12 +9,21 @@
   color: red;
 }
 
+.nav .logo {
+  display: flex;
+  align-items: center;
+}
+
+.nav .logo .logo-text {
+  margin-left: 0.5rem;
+}
+
 .success-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 30vh;
+  height: 35vh;
   padding-top: 0px; /* Add padding to the top */
 }
 
@@ -52,7 +41,7 @@
   font-size: 1.2rem;
 }
 
-.sucess-return:link {
+.sucess-return{
   color: black;
 }
 

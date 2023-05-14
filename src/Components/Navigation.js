@@ -2,36 +2,37 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import { AuthContext } from 'react-oauth2-code-pkce';
 import '../App.css';
+import logo from '../img/Mindset_Academy_logo.png'
 
 function Navigation(props) {
   const { token, login, logOut } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   console.log('aaa', token)
-  //   if (!token) {
-  //     console.log('bbb')
-  //     login(props.state);
-  //   }
-  // }, [])
-
   const { language, onLanguageChange } = props;
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleSelectLanguageClick = (value) => {
     onLanguageChange(value);
   };
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    logOut();
+  }
 
 
   // Returns nav bar
   return (
     <Navbar className="nav" variant="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/">TMA Teams</Navbar.Brand>
+        <Navbar.Brand className='logo' href="/home">
+        <img src={logo} alt="React Bootstrap logo" width="130" height="40" className="d-inline-block align-top"/>
+          <span className="logo-text">TMA Teams</span>
+          </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/home">{props.lanContent.NavHome}</Nav.Link>
             <Nav.Link href="/createsurvey">{props.lanContent.NavSurveys}</Nav.Link>
-            <Nav.Link href="/csv">Upload</Nav.Link>
           </Nav>
           
           <Dropdown onSelect={handleSelectLanguageClick}>
@@ -45,12 +46,13 @@ function Navigation(props) {
           </Dropdown>
           <Dropdown>
       <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
-        User Profile
+      {props.lanContent.NavUser}
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="/profile">Profile Settings</Dropdown.Item>
+        <Dropdown.Item href="/profile">{props.lanContent.ProfileTitle}</Dropdown.Item>
+        <Dropdown.Item href="/viewsurvey">{props.lanContent.NavViewSurvey}</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item onClick={() => logOut()}>Logout</Dropdown.Item>
+        <Dropdown.Item onClick={handleLogout}>{props.lanContent.NavLogout}</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
         </Navbar.Collapse>

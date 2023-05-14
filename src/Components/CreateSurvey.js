@@ -15,10 +15,19 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from 'react-oauth2-code-pkce';
+
+//background color
+const useStyles = makeStyles(() => ({
+  root: {
+    backgroundColor: '#f5f5f5',
+    minHeight: '94vh',
+  },
+}));
 
 function CreateSurvey(props) {
 const QuestionTypes = {
@@ -79,12 +88,6 @@ const QuestionTypes = {
   const navigate = useNavigate();
 
   const saveQuestion = () => {
-    if (!surveyNameRef.current.value) {
-      setSurveyNameHasError(true);
-      return;
-    } else {
-      setSurveyNameHasError(false);
-    }
 
     if (!questionText){
       setQuestionNameHasError(true);
@@ -141,21 +144,20 @@ const QuestionTypes = {
   };
 
   const handleSubmit = async (e) => {
+    if (!surveyNameRef.current.value){
+      setSurveyNameHasError(true);
+      return;
+    } else {
+      setSurveyNameHasError(false);
+    }
+
     e.preventDefault();
     const body = {
       name: surveyNameRef.current.value,
       requiresAuthentication: true,
       requiresAuthenticationFromSameOrganisation: true,
       json: "string",
-      questions: [...savedQuestions, {
-        surveyId: uuidv4(),
-        name: questionText,
-        responseType: questionType,
-        elementJSON: "string",
-        choices: questionType === QuestionTypes.MultipleChoice.value ? 
-        options : questionType === QuestionTypes.SingleChoice.value ?
-        options : null,
-      }],
+      questions: [...savedQuestions],
     }
 
     const surveyUrl = "https://tma.adp.au/survey";
@@ -173,19 +175,33 @@ const QuestionTypes = {
       result = await result.json();
       navigate(`${result.id}`)
     }
+
+
   }
 
-
+  const classes = useStyles();
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <div className={classes.root} >
+    <Box sx={{ flexGrow: 1 }} style={{ marginLeft: 400, marginRight: 400}} >
+      <Grid item xs={12}>
+         <TextField
+                fullWidth
+                label={props.lanContent.SurveyName}
+                inputRef={surveyNameRef}
+                variant="outlined"
+                required
+                error={surveyNameHasError}
+                style={{marginTop: 10, marginBottom:10}}
+              />
+         </Grid>
       <Grid container spacing={2}>
       {savedQuestions.map((savedQuestion, index) => (
           <Grid  key={`saved-question-${index}`} item xs={12}>
             <Paper
               elevation={2}
-              sx={{ p: 2, backgroundColor: 'primary.light', borderRadius: 1, position: 'relative' }}
+              sx={{ p: 2, backgroundColor: 'primary.light', borderRadius: 1, position: 'relative'}}
             >
-              <Typography variant="h6" color="primary.contrastText">
+              <Typography variant="h6" color="primary.contrastText" >
                 {props.lanContent.SurvySavedQuestion} {index + 1}
               </Typography>
               <Typography color="primary.contrastText">{props.lanContent.SurveyQuestionType}: {savedQuestion.responseType}</Typography>
@@ -224,15 +240,9 @@ const QuestionTypes = {
 
         <Grid item xs={12}>
           <Typography variant="h6">{props.lanContent.SurveyTitle}</Typography>
-          <TextField
-                fullWidth
-                label={props.lanContent.SurveyName}
-                inputRef={surveyNameRef}
-                variant="outlined"
-                required
-                error={surveyNameHasError}
-              />
+          
         </Grid>
+
         <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel id="question-type-label">{props.lanContent.SurveyQuestionType}</InputLabel>
@@ -286,17 +296,21 @@ const QuestionTypes = {
               </Box>
             </Grid>
           ))}
-        <Grid item xs={12}>
-          <Button type="submit"  variant="contained" color="primary" onClick={saveQuestion}>
-            {props.lanContent.SurveySaveQuestion}
-          </Button>
-
-          <Button type="button"  variant="contained" disabled={!savedQuestions.length} color="primary" onClick={handleSubmit}>
-            {props.lanContent.SurveyUpload}
-          </Button>
+        <Grid item xs={12} container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+          <Grid item>
+            <Button type="submit"  variant="contained" color="primary" onClick={saveQuestion}>
+              {props.lanContent.SurveySaveQuestion}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button type="button"  variant="contained" disabled={!savedQuestions.length} color="primary" onClick={handleSubmit}>
+              {props.lanContent.SurveyUpload}
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
+    </div>
   ); 
 };
 

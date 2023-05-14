@@ -20,8 +20,6 @@ const Home = () => {
 
   return (
     <div>
-
-
       <Box  
         sx={{
           display: 'flex',
