@@ -16,6 +16,10 @@ function ViewSurveys(props){
   const authContext = useContext(AuthContext);
   const getSurveyUrl = 'https://tma.adp.au/Survey';
   const [surveys, setSurveys] = useState([])
+  const [surveyId, setSurveyId] = useState([])
+
+  
+  const currentHost = window.location.host;
 
   const handleCopy = async (url) => {
     if (!navigator.clipboard) {
@@ -33,7 +37,9 @@ function ViewSurveys(props){
         "Authorization": `Bearer ${authContext.token}`
       }});
       const data = await res.json();
-      const surveys = data.map(survey => ({surveyName: survey.name, surveyLink: `http://localhost:3000/dosurvey/${survey.id}`}))
+      const surveys = data.map(survey => ({surveyName: survey.name, 
+        surveyLink: `${survey.id}`,
+        surveyid: survey.id}))
       setSurveys(surveys)
 
     }
@@ -41,7 +47,7 @@ function ViewSurveys(props){
     fetchSurveyQuestions();
    }, [getSurveyUrl])
 
-   console.log(surveys)
+
   return (
     <div style={{ marginLeft: 200, marginRight: 200 ,marginTop: 25}}>
       <h1 style={{textAlign: 'center'}}>{props.lanContent.ViewSurveyTitle}</h1>
@@ -60,13 +66,13 @@ function ViewSurveys(props){
               <TableRow >
                 <TableCell>{survey.surveyName}</TableCell>
                 <TableCell>
-                  {survey.surveyLink}
-                  <Button onClick={() => handleCopy(survey.surveyLink)}>
+                {currentHost}/dosurvey/{survey.surveyLink}
+                  <Button onClick={() => handleCopy(`${currentHost}/dosurvey/${survey.surveyLink}`)}>
                     <FileCopyIcon />
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary" href={`viewsurvey/${survey.surveyid}`}>
                   {props.lanContent.ViewSurveyResults}
                   </Button>
                 </TableCell>

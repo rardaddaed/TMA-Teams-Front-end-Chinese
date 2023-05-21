@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   FormControl,
@@ -30,29 +31,28 @@ function DoSurvey(props){
   const [selectedOptions, setSelectedOptions] = useState([]);
   const answers = useRef([]);
 
-  const handleOptionChange = (event) => {
-    console.log(event);
-    setSelectedOptions(prevOptions => [...prevOptions, event.target.value]);;
-  };
+  const navigate = useNavigate();
 
   const handleSingleValueChange = (event, index) => {
     console.log(event.target.value);
     answers.current[index] = { ...answers.current[index], answer: event.target.value };
-    console.log('answers', answers);
   }
 
   const handleMultipleValueChange = (event, index, option) => {
     if (event.target.checked) {
-      if (answers.current[index].answer.indexOf(option) < 0) {
-        answers.current[index].answer = [...answers.current[index].answer, option];
+      if (!answers.current[index].answer) {
+        answers.current[index].answer = option.toString();
+      } else {
+        answers.current[index].answer = answers.current[index].answer.toString() + ", " + option;
       }
     } else {
       const idx = answers.current[index].answer.indexOf(option);
       if (idx > -1) {
-        answers.current[index].answer.splice(idx, 1);
+        answers.current[index].answer.replace(option.toString() + ", ", "")
+        console.log(typeof option)
+        console.log(answers.current[index].answer)
       }
     }
-    console.log('answers', answers);
   }
 
 // fetch survey
@@ -68,18 +68,11 @@ function DoSurvey(props){
       setQuestions(data.questions);
       setQuestionId(data.questions.map((question) => question.id));
       answers.current = data.questions.map((question) => {
-        if (question.responseType === 'MultipleChoice') {
-          return {
-            questionId: question.id,
-            answer: []
-          };
-        } else {
           return {
             questionId: question.id,
             answer: null
           };
-        }
-      });
+      })
     }
 
     fetchSurveyQuestions();
@@ -96,9 +89,11 @@ const test = (e) => {
     
     const body = {
       surveyId: id,
-      answers: []
+      answers: answers.current,
     }
     const responseUrl = `https://tma.adp.au/${id}/Response`;
+    console.log(body)
+    console.log(authContext.token)
 
     let result = await fetch(responseUrl, {
       method: 'POST',
@@ -109,7 +104,10 @@ const test = (e) => {
         "Authorization": `Bearer ${authContext.token}`
       }
     })
-    result = await result.json();
+    if (result.ok){
+      result = await result.json();
+      navigate('/dosurvey/success')
+    }
   }
 
   const Question = ({ type, title, options, index }) => {
@@ -140,7 +138,7 @@ const test = (e) => {
         return (
           <FormControl component="fieldset">
           <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-          <RadioGroup value={selectedOptions}
+          <RadioGroup
           onChange={(event) => handleSingleValueChange(event, index)}>
             {options.map((option, optIndex) => (
               <FormControlLabel
@@ -196,7 +194,7 @@ const test = (e) => {
         )}
         <div style={{ height: 20 }} />
         <Grid item xs={12} container justifyContent="center" alignItems="center">
-            <Button type="submit" variant="contained" color="primary" onClick={test}>
+            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
               submit
             </Button>
           </Grid>

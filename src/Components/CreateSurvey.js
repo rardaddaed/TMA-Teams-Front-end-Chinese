@@ -75,6 +75,7 @@ const QuestionTypes = {
 
   const [questionType, setQuestionType] = useState(QuestionTypes.MultipleChoice.value);
   const [questionText, setQuestionText] = useState('');
+  const [questionWeight, setQuestionWeight] = useState(1);
   const [options, setOptions] = useState(['', '']);
   const [savedQuestions, setSavedQuestions] = useState([]);
 
@@ -100,6 +101,7 @@ const QuestionTypes = {
       surveyId: uuidv4(),
       name: questionText,
       responseType: questionType,
+      weight: questionWeight,
       elementJSON: "string",
       choices: questionType === QuestionTypes.MultipleChoice.value ? 
       options : questionType === QuestionTypes.SingleChoice.value ?
@@ -114,9 +116,10 @@ const QuestionTypes = {
 
   const editQuestion = (index) => {
     const questionToEdit = savedQuestions[index];
-    setQuestionType(questionToEdit.type);
-    setQuestionText(questionToEdit.text);
-    setOptions(questionToEdit.options || ['']);
+    setQuestionType(questionToEdit.responseType);
+    setQuestionText(questionToEdit.name);
+    setQuestionWeight(questionToEdit.weight);
+    setOptions(questionToEdit.choices || ['']);
     deleteQuestion(index);
   };
 
@@ -127,6 +130,10 @@ const QuestionTypes = {
   const handleQuestionTextChange = (event) => {
     setQuestionText(event.target.value);
   };
+
+  const handleQuestionWeightChange = (event) => {
+    setQuestionWeight(event.target.value)
+  }
 
   const handleOptionChange = (event, index) => {
     const newOptions = [...options];
@@ -154,8 +161,8 @@ const QuestionTypes = {
     e.preventDefault();
     const body = {
       name: surveyNameRef.current.value,
-      requiresAuthentication: true,
-      requiresAuthenticationFromSameOrganisation: true,
+      requiresAuthentication: false,
+      requiresAuthenticationFromSameOrganisation: false,
       json: "string",
       questions: [...savedQuestions],
     }
@@ -206,6 +213,7 @@ const QuestionTypes = {
               </Typography>
               <Typography color="primary.contrastText">{props.lanContent.SurveyQuestionType}: {savedQuestion.responseType}</Typography>
               <Typography color="primary.contrastText">{props.lanContent.SurveyQuestionName}: {savedQuestion.name}</Typography>
+              <Typography color="primary.contrastText">{props.lanContent.SurveyWeight}: {savedQuestion.weight}</Typography>
               {(savedQuestion.responseType === QuestionTypes.MultipleChoice.value || savedQuestion.responseType === QuestionTypes.SingleChoice.value) && (
                 <>
                   <Typography color="primary.contrastText">{props.lanContent.SurveySavedQuestionChoice}</Typography>
@@ -243,6 +251,32 @@ const QuestionTypes = {
           
         </Grid>
 
+        <Grid item xs={9}>
+          <TextField
+            fullWidth
+            id="question-text"
+            label={props.lanContent.SurveyQuestionName}
+            value={questionText}
+            onChange={handleQuestionTextChange}
+            variant="outlined"
+            required
+            error={questionNameHasError}
+          />
+        </Grid>
+
+        <Grid item xs={3}>
+          <TextField
+            fullWidth
+            id="question-weight"
+            label={props.lanContent.SurveyWeight}
+            type="number"
+            value={questionWeight}
+            onChange={handleQuestionWeightChange}
+            variant="outlined"
+            required
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel id="question-type-label">{props.lanContent.SurveyQuestionType}</InputLabel>
@@ -261,18 +295,7 @@ const QuestionTypes = {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            id="question-text"
-            label={props.lanContent.SurveyQuestionName}
-            value={questionText}
-            onChange={handleQuestionTextChange}
-            variant="outlined"
-            required
-            error={questionNameHasError}
-          />
-        </Grid>
+
         {(questionType === QuestionTypes.MultipleChoice.value || questionType === QuestionTypes.SingleChoice.value) &&
           options.map((option, index) => (
             <Grid key={`option-${index}`} item xs={12}>

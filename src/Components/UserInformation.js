@@ -74,7 +74,7 @@ function UserInformation(props){
           role: userInfo.role,
         });
       }
-  
+      
       fetchUserInfo();
      }, [userUrl])
      

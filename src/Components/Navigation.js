@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce';
 import '../App.css';
 import logo from '../img/Mindset_Academy_logo.png'
+import jwt_decode from 'jwt-decode';
 
 function Navigation(props) {
-  const { token, login, logOut } = useContext(AuthContext);
-
+  const authContext = useContext(AuthContext);
   const { language, onLanguageChange } = props;
-  const [loggingOut, setLoggingOut] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelectLanguageClick = (value) => {
     onLanguageChange(value);
@@ -16,8 +17,9 @@ function Navigation(props) {
 
   const handleLogout = () => {
     sessionStorage.clear();
-    logOut();
+    authContext.logOut();
   }
+
 
 
   // Returns nav bar
@@ -33,6 +35,7 @@ function Navigation(props) {
           <Nav className="me-auto">
             <Nav.Link href="/home">{props.lanContent.NavHome}</Nav.Link>
             <Nav.Link href="/createsurvey">{props.lanContent.NavSurveys}</Nav.Link>
+            <Nav.Link href="/groups">View Groups</Nav.Link>
           </Nav>
           
           <Dropdown onSelect={handleSelectLanguageClick}>
