@@ -53,7 +53,7 @@ function SurveyResults(props){
 
       const savedSurveys = [];
 
-      data.responses.forEach(async survey => {
+      for (let survey of data.responses) {
         const userUrl = `https://tma.adp.au/User/${survey.userId}`;
         const fetchUserInfo = async () => {
           const userRes = await fetch(userUrl, {headers: {
@@ -70,25 +70,20 @@ function SurveyResults(props){
               options: foundQuestion.choices,
               answer: answer.answer 
             };
-          })
+          });
           savedSurveys.push({
             respondentName: userData.displayName,
             answers: mappedAnswers,
           })
         }
         await fetchUserInfo();
-      });
+      }
 
       setSurveys(savedSurveys)
     }
 
     fetchSurveyResults();
-   }, [surveyUrl])
-
-
-   useEffect(() => {
-    console.log(surveys)
-   }, [surveys])
+   }, [])
 
 
   return (
