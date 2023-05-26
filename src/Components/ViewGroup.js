@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Box, Button, Table, TableBody, TableCell, 
-    TableContainer, TableHead, TableRow, Typography, Accordion, AccordionSummary,AccordionDetails, } from '@material-ui/core';
+import {
+  Box, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Typography, Accordion, AccordionSummary, AccordionDetails,
+} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { AuthContext } from 'react-oauth2-code-pkce';
 import jwt_decode from 'jwt-decode';
 
 
-//表格中的数据
+// Mock-up Data
 const groupData = [
   {
     groupName: 'Group 1',
@@ -32,23 +34,22 @@ function ViewGroup() {
 
   const [username, setUsername] = useState("");
 
-  const handleDelete = (memberToDelete) => {
-    console.log(authContext.token);
-  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const res = await fetch(userUrl, {headers: {
-        "accept": 'application/json',
-        "Content-Type": 'application/json',
-        "Authorization": `Bearer ${authContext.token}`
-      }});
+      const res = await fetch(userUrl, {
+        headers: {
+          "accept": 'application/json',
+          "Content-Type": 'application/json',
+          "Authorization": `Bearer ${authContext.token}`
+        }
+      });
       const data = await res.json();
       setUsername(data.displayName);
     }
-    
+
     fetchUserInfo();
-   }, [userUrl])
+  }, [userUrl])
 
 
   return (
@@ -68,8 +69,6 @@ function ViewGroup() {
                     <TableRow>
                       <TableCell>Name</TableCell>
                       <TableCell>Email</TableCell>
-                      <TableCell> </TableCell>
-                      <TableCell> </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -77,14 +76,10 @@ function ViewGroup() {
                       <TableRow key={index}>
                         <TableCell><Typography variant="body1">{member.name}</Typography></TableCell>
                         <TableCell><Typography variant="body1">{member.email}</Typography></TableCell>
-                        <TableCell align="left"><Button variant="outlined">查看survey</Button></TableCell>
-                        <TableCell>
-                          <Button variant="contained" style={{backgroundColor:'red', color:'white'}} onClick={() => handleDelete(member)}>Delete</Button> {/* Added a new delete button */}
-                        </TableCell>
                       </TableRow>
                     ))}
                     <TableRow>
-                  </TableRow>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>

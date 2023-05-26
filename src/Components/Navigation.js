@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from 'react-oauth2-code-pkce';
 import '../App.css';
 import logo from '../img/Mindset_Academy_logo.png'
-import jwt_decode from 'jwt-decode';
-
 function Navigation(props) {
+
   const authContext = useContext(AuthContext);
   const { language, onLanguageChange } = props;
   const navigate = useNavigate();
@@ -27,20 +26,20 @@ function Navigation(props) {
     <Navbar className="nav" variant="light" expand="lg">
       <Container>
         <Navbar.Brand className='logo' href="/home">
-        <img src={logo} alt="React Bootstrap logo" width="130" height="40" className="d-inline-block align-top"/>
+          <img src={logo} alt="React Bootstrap logo" width="130" height="40" className="d-inline-block align-top" />
           <span className="logo-text">TMA Teams</span>
-          </Navbar.Brand>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/home">{props.lanContent.NavHome}</Nav.Link>
             <Nav.Link href="/createsurvey">{props.lanContent.NavSurveys}</Nav.Link>
-            <Nav.Link href="/groups">View Groups</Nav.Link>
+            <Nav.Link href="/groups">{props.lanContent.NavGroup}</Nav.Link>
           </Nav>
-          
+
           <Dropdown onSelect={handleSelectLanguageClick}>
             <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
-            {props.lanContent.NavLanguage}
+              {props.lanContent.NavLanguage}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item eventKey="english">{props.lanContent.NavLanguageEng}</Dropdown.Item>
@@ -48,16 +47,16 @@ function Navigation(props) {
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown>
-      <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
-      {props.lanContent.NavUser}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item href="/profile">{props.lanContent.ProfileTitle}</Dropdown.Item>
-        <Dropdown.Item href="/viewsurvey">{props.lanContent.NavViewSurvey}</Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item onClick={handleLogout}>{props.lanContent.NavLogout}</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+            <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
+              {props.lanContent.NavUser}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="/profile">{props.lanContent.ProfileTitle}</Dropdown.Item>
+              <Dropdown.Item href="/viewsurvey">{props.lanContent.NavViewSurvey}</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleLogout}>{props.lanContent.NavLogout}</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Navbar.Collapse>
       </Container>
     </Navbar>

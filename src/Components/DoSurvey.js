@@ -20,12 +20,12 @@ import { useParams } from 'react-router-dom'
 
 
 
-function DoSurvey(props){
+function DoSurvey() {
   const authContext = useContext(AuthContext);
   const [questions, setQuestions] = useState([]);
   const [surveyTitle, setSurveyTitle] = useState('');
   const [questionId, setQuestionId] = useState([]);
-  const {id} = useParams();
+  const { id } = useParams();
   const surveyUrl = `https://tma.adp.au/Survey/${id}`
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -55,38 +55,35 @@ function DoSurvey(props){
     }
   }
 
-// fetch survey
+  // fetch survey
   useEffect(() => {
     const fetchSurveyQuestions = async () => {
-      const res = await fetch(surveyUrl, {headers: {
-        'accept': 'text/plain',
-        "Content-Type": 'application/json',
-        "Authorization": `Bearer ${authContext.token}`
-      }});
+      const res = await fetch(surveyUrl, {
+        headers: {
+          'accept': 'text/plain',
+          "Content-Type": 'application/json',
+          "Authorization": `Bearer ${authContext.token}`
+        }
+      });
       const data = await res.json();
       setSurveyTitle(data.name);
       setQuestions(data.questions);
       setQuestionId(data.questions.map((question) => question.id));
       answers.current = data.questions.map((question) => {
-          return {
-            questionId: question.id,
-            answer: null
-          };
+        return {
+          questionId: question.id,
+          answer: null
+        };
       })
     }
 
     fetchSurveyQuestions();
-   }, [surveyUrl])
+  }, [surveyUrl])
 
-const test = (e) => {
-  e.preventDefault();
-  console.log(selectedOptions)
-}
-
-// post response
+  // post response
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const body = {
       surveyId: id,
       answers: answers.current,
@@ -104,7 +101,7 @@ const test = (e) => {
         "Authorization": `Bearer ${authContext.token}`
       }
     })
-    if (result.ok){
+    if (result.ok) {
       result = await result.json();
       navigate('/dosurvey/success')
     }
@@ -123,8 +120,8 @@ const test = (e) => {
         return (
           <Box>
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-            <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} 
-            onChange={(event) => handleSingleValueChange(event, index)}/>
+            <TextField fullWidth type="date" InputLabelProps={{ shrink: true }}
+              onChange={(event) => handleSingleValueChange(event, index)} />
           </Box>
         );
       case 'Number':
@@ -137,19 +134,19 @@ const test = (e) => {
       case 'SingleChoice':
         return (
           <FormControl component="fieldset">
-          <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
-          <RadioGroup
-          onChange={(event) => handleSingleValueChange(event, index)}>
-            {options.map((option, optIndex) => (
-              <FormControlLabel
-                key={optIndex}
-                value={option}
-                control={<Radio color="default" />}
-                label={option}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
+            <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
+            <RadioGroup
+              onChange={(event) => handleSingleValueChange(event, index)}>
+              {options.map((option, optIndex) => (
+                <FormControlLabel
+                  key={optIndex}
+                  value={option}
+                  control={<Radio color="default" />}
+                  label={option}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
         );
       case 'MultipleChoice':
         return (
@@ -171,7 +168,7 @@ const test = (e) => {
           <FormControl component="fieldset">
             <FormLabel style={{ color: 'initial' }}>{title}</FormLabel>
             <RadioGroup row
-            onChange={(event) => handleSingleValueChange(event, index)}>
+              onChange={(event) => handleSingleValueChange(event, index)}>
               <FormControlLabel value="yes" control={<Radio color="default" />} label="Yes" />
               <FormControlLabel value="no" control={<Radio color="default" />} label="No" />
             </RadioGroup>
@@ -180,26 +177,26 @@ const test = (e) => {
       default:
         return null;
     }
-    
+
   };
 
-    return (
-      <Box style={{ marginLeft: 200, marginRight: 200 ,marginTop: 50}}>
-        <Typography variant="h6" color="primary.contrastText">
-          {surveyTitle}
-        </Typography>
-        <div style={{ height: 20 }} />
-        {questions.map((question, index) => 
-          <Question key={index} type={question.responseType} title={question.name} options={question.choices} index={index} />
-        )}
-        <div style={{ height: 20 }} />
-        <Grid item xs={12} container justifyContent="center" alignItems="center">
-            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
-              submit
-            </Button>
-          </Grid>
-      </Box>
-    );
-  };
+  return (
+    <Box style={{ marginLeft: 200, marginRight: 200, marginTop: 50 }}>
+      <Typography variant="h6" color="primary.contrastText">
+        {surveyTitle}
+      </Typography>
+      <div style={{ height: 20 }} />
+      {questions.map((question, index) =>
+        <Question key={index} type={question.responseType} title={question.name} options={question.choices} index={index} />
+      )}
+      <div style={{ height: 20 }} />
+      <Grid item xs={12} container justifyContent="center" alignItems="center">
+        <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
+          submit
+        </Button>
+      </Grid>
+    </Box>
+  );
+};
 
 export default DoSurvey;

@@ -6,6 +6,7 @@
         "NavLanguageEng": "English",
         "NavLanguageCn": "Chinese",
         "NavUser": "User",
+        "NavGroup": "View Groups",
         "NavViewSurvey": "View Surveys",
         "NavLogout": "Logout",
         "SurveyTitle": "Create a question",
@@ -40,7 +41,15 @@
         "ViewSurveyTime": "Date Created",
         "ViewSurveyLink": "Survey URL",
         "ViewSurveyResults": "View Results",
-        "ViewSurveyCopy": "Copied: "
+        "ViewSurveyCopy": "Copied: ",
+        "ResultsNone": "There are no results to display!",
+        "ResultsCreateGroup": "Create Group",
+        "ResultGroupSize": "Group Size",
+        "ResultsUsername": "Respondent's Name: ",
+        "GroupSuccessTitle": "Group Successfully Created!",
+        "GroupSuccessMsg": "Your group has been sorted and created successfully.",
+        "GroupSuccessNavigate": "View Your Teams",
+        "Redirect": "Redirecting..."
     },
     "chinese":{
         "NavHome": "首页",
@@ -51,6 +60,7 @@
         "NavUser": "用户",
         "NavViewSurvey": "查看问卷",
         "NavLogout": "退出",
+        "NavGroup": "查看小组",
         "SurveyTitle": "创建一个问题",
         "SurveyName": "问卷标题",
         "SurveyQuestionType": "问题类型",
@@ -83,6 +93,14 @@
         "ViewSurveyTime": "创建时间",
         "ViewSurveyLink": "问卷链接",
         "ViewSurveyResults": "查看结果",
-        "ViewSurveyCopy": "已复制： "
+        "ViewSurveyCopy": "已复制： ",
+        "ResultsNone": "没有结果可显示",
+        "ResultsCreateGroup": "创建小组",
+        "ResultGroupSize": "小组人数",
+        "ResultsUsername": "用户名：",
+        "GroupSuccessTitle": "小组创建成功！",
+        "GroupSuccessMsg": "您的小组已创建",
+        "GroupSuccessNavigate": "查看小组",
+        "Redirect": "正在重定向..."
     }
 }

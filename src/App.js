@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,12 +14,14 @@ import UserInformation from './Components/UserInformation'
 import ViewSurveys from './Components/ViewSurveys';
 import CreateSurveySucess from './Components/CreateSurveySuccess'
 import SurveyResults from './Components/SurveyResults'
-import Groups from './Components/ViewGroup'
+import Groups from './Components/ViewGroup';
+import CreateGroupSuccess from './Components/CreateGroupSuccess'
+import Auth from './Components/Auth';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Translation from './Data.json';
-import { AuthContext, AuthProvider } from 'react-oauth2-code-pkce';
+import { AuthProvider } from 'react-oauth2-code-pkce';
 
 export const LoginContext = React.createContext({
   isLoggedIn: false
@@ -29,7 +31,7 @@ export const LanguageContext = React.createContext({
   language: "english"
 });
 
-function generateState(){
+function generateState() {
   const crypto = require('crypto-browserify');
   return crypto.randomBytes(16).toString('hex');
 }
@@ -41,39 +43,39 @@ const logOutUrl = 'https://hydra.adp.au/oauth2/sessions/logout';
 const state = generateState();
 
 export default function App() {
-  
+
   const [language, setLanguage] = useState("english");
   const [lanContent, setLanContent] = useState({});
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem('selectedLanguage');
 
-    if (storedLanguage === "english"){
+    if (storedLanguage === "english") {
       setLanContent(Translation.english)
-    } else if (storedLanguage === "chinese"){
+    } else if (storedLanguage === "chinese") {
       setLanContent(Translation.chinese)
     } else {
       setLanContent(Translation.english)
     }
   })
 
-  function handleSelectLanguage(newLanguage){
+  function handleSelectLanguage(newLanguage) {
     setLanContent(newLanguage);
     localStorage.setItem('selectedLanguage', newLanguage)
   }
 
-const authConfig = {
+  const authConfig = {
     clientId: '2dac11ff-4039-4fec-b16e-a3216b82ba88',
     authorizationEndpoint: authUrl,
     tokenEndpoint: tokenUrl,
     redirectUri: 'http://localhost:3000/home',
     scope: 'openid offline profile email roles',
     state: state,
-    autoLogin: false,
+    autoLogin: true,
     storage: 'session',
     logoutEndpoint: logOutUrl,
     logoutRedirect: 'http://localhost:3000/home',
-}
+  }
 
 
 
@@ -83,24 +85,26 @@ const authConfig = {
         <div className='App'>
           <Router>
             <Navigation language={language}
-                        onLanguageChange={handleSelectLanguage}
-                        lanContent={lanContent} 
-                        state={state}
-                         />
-              <Routes>
-                <Route exact path="/home" element={<Home lanContent={lanContent} />} /> 
-                <Route path="/createsurvey" element={<CreateSurvey lanContent={lanContent}/>}/>
-                <Route path="/createsurvey/:id" element={<CreateSurveySucess lanContent={lanContent}/>}/>
-                <Route path="/dosurvey/:id" element={<DoSurvey lanContent={lanContent}/>}/>
-                <Route path="/dosurvey/success" element={<DoSurveySuccess lanContent={lanContent}/>}/>
-                <Route path="/profile" element={<UserInformation lanContent={lanContent}/>} />
-                <Route path="/viewsurvey" element={<ViewSurveys lanContent={lanContent}/>} />
-                <Route path="/viewsurvey/:id" element={<SurveyResults lanContent={lanContent}/>} />
-                <Route path="/groups" element={<Groups lanContent={lanContent}/>} />
-              </Routes>
+              onLanguageChange={handleSelectLanguage}
+              lanContent={lanContent}
+              state={state}
+            />
+            <Routes>
+              <Route exact path="/" element={<Auth lanContent={lanContent} />} />
+              <Route exact path="/home" element={<Home lanContent={lanContent} />} />
+              <Route path="/createsurvey" element={<CreateSurvey lanContent={lanContent} />} />
+              <Route path="/createsurvey/:id" element={<CreateSurveySucess lanContent={lanContent} />} />
+              <Route path="/dosurvey/:id" element={<DoSurvey lanContent={lanContent} />} />
+              <Route path="/dosurvey/success" element={<DoSurveySuccess lanContent={lanContent} />} />
+              <Route path="/profile" element={<UserInformation lanContent={lanContent} />} />
+              <Route path="/viewsurvey" element={<ViewSurveys lanContent={lanContent} />} />
+              <Route path="/viewsurvey/:id" element={<SurveyResults lanContent={lanContent} />} />
+              <Route path="/groups" element={<Groups lanContent={lanContent} />} />
+              <Route path="/groups/success" element={<CreateGroupSuccess lanContent={lanContent} />} />
+            </Routes>
           </Router>
         </div>
-      </AuthProvider>/
+      </AuthProvider>
     </React.Fragment>
   );
 }

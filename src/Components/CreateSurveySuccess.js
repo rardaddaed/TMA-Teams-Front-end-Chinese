@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 function CreateSurveySuccess(props) {
-  const {id} = useParams();
+  const { id } = useParams();
   const currentHost = window.location.host;
   return (
     <div className="success-container">
@@ -14,7 +14,7 @@ function CreateSurveySuccess(props) {
       <p className="success-message">{props.lanContent.UploadSucessMsg}</p>
       <p className="success-url">{props.lanContent.UploadSucessUrl}<a href={`/dosurvey/${id}`}>
         {currentHost}/dosurvey/{id}
-          </a></p>
+      </a></p>
       <a className="sucess-return" href="/home">{props.lanContent.ReturnHome}</a>
     </div>
   );
