@@ -19,10 +19,10 @@ const Home = () => {
           justifyContent: 'center',
         }}>
         <Typography variant="h3" component="h1" gutterBottom>
-          Slogan
+          TMA Teams Asia
         </Typography>
         <Typography variant="body1" component="p">
-          Some text describing company or products.
+          The Mindset Academy
         </Typography>
       </Box>
       <Box
