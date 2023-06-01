@@ -101,6 +101,6 @@
         "GroupSuccessTitle": "小组创建成功！",
         "GroupSuccessMsg": "您的小组已创建",
         "GroupSuccessNavigate": "查看小组",
-        "Redirect": "正在重定向..."
+        "Redirect": "正在跳转..."
     }
 }
