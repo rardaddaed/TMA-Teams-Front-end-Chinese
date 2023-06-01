@@ -34,7 +34,6 @@ function DoSurvey() {
   const navigate = useNavigate();
 
   const handleSingleValueChange = (event, index) => {
-    console.log(event.target.value);
     answers.current[index] = { ...answers.current[index], answer: event.target.value };
   }
 
@@ -49,8 +48,6 @@ function DoSurvey() {
       const idx = answers.current[index].answer.indexOf(option);
       if (idx > -1) {
         answers.current[index].answer.replace(option.toString() + ", ", "")
-        console.log(typeof option)
-        console.log(answers.current[index].answer)
       }
     }
   }
@@ -89,8 +86,6 @@ function DoSurvey() {
       answers: answers.current,
     }
     const responseUrl = `https://tma.adp.au/${id}/Response`;
-    console.log(body)
-    console.log(authContext.token)
 
     let result = await fetch(responseUrl, {
       method: 'POST',
